@@ -1,0 +1,10 @@
+{
+  "name": "@kiqi-monorepo/kiqi-monorepo-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@kiqi-monorepo/kiqi-monorepo"
+    ]
+  }
+}

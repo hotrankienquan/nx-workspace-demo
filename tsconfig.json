@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/kiqi-monorepo-e2e"
+    },
+    {
+      "path": "./apps/kiqi-monorepo"
+    },
+    {
+      "path": "./apps/shell-e2e"
+    },
+    {
+      "path": "./apps/shell"
+    },
+    {
+      "path": "./apps/characters-e2e"
+    },
+    {
+      "path": "./apps/characters"
+    },
+    {
+      "path": "./libs/shared"
+    }
+  ]
+}
