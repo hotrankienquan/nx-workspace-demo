@@ -1,2 +1,1 @@
-export {default } from './app/layouts/layout';
-
+export { default } from './app/layouts/layout';

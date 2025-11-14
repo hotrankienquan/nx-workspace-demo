@@ -1,29 +1,39 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-import App from './app/app';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Layout from './app/layouts/layout';
 
 
 async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
-    return
+  if (process.env.NODE_ENV === 'development') {
+    const { worker } = require('./app/__mocks__/libs/browser-worker');
+    worker.start({
+      serviceWorker: {
+        url: '/mockServiceWorker.js',
+      },
+    });
   }
- 
-  const { worker } = await import('./app/__mocks__/libs/browser-worker')
- 
-  // `worker.start()` returns a Promise that resolves
-  // once the Service Worker is up and ready to intercept requests.
-  return worker.start()
 }
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+const theme = createTheme();
+
+
+
 enableMocking().then(() => {
-  console.log('Mocking enabled')
+  console.log('Mocking enabled');
   root.render(
     <StrictMode>
-      <App />
+        <ThemeProvider theme={theme}>
+          <Layout />
+        </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen={true} />
     </StrictMode>
   );
-  
-})
+});
+
+

@@ -1,1 +1,1 @@
-export { default } from './app/app-remote-manage-route'
+export { default } from './app/app-remote-manage-route';

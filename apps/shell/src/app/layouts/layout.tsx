@@ -1,15 +1,13 @@
-import {
-  Box,
-  CssBaseline,
-} from '@mui/material';
+import { Box, CssBaseline } from '@mui/material';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-
 
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 
-const ModuleInstruction1 = React.lazy(() => import("characters/ModuleInstruction1"))
+const ModuleInstruction1 = React.lazy(
+  () => import('characters/ModuleInstruction1')
+);
 
 function ClaimPilotLayout() {
   return (

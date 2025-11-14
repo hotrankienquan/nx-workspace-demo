@@ -29,19 +29,18 @@
       "import": "./src/remote-entry.ts",
       "default": "./src/remote-entry.ts"
     },
-    "./Module2":{
-      "@kiqi-monorepo/source":"./src/remote-entry2.ts",
-      "types":"./src/remote-entry2.ts",
-      "import":"./src/remote-entry2.ts",
-      "default":"./src/remote-entry2.ts"
+    "./Module2": {
+      "@kiqi-monorepo/source": "./src/remote-entry2.ts",
+      "types": "./src/remote-entry2.ts",
+      "import": "./src/remote-entry2.ts",
+      "default": "./src/remote-entry2.ts"
     },
-    "./ModuleInstruction1":{
-      "@kiqi-monorepo/source":"./src/remote-entry3.ts",
-      "types":"./src/remote-entry3.ts",
-      "import":"./src/remote-entry3.ts",
-      "default":"./src/remote-entry3.ts"
+    "./ModuleInstruction1": {
+      "@kiqi-monorepo/source": "./src/remote-entry3.ts",
+      "types": "./src/remote-entry3.ts",
+      "import": "./src/remote-entry3.ts",
+      "default": "./src/remote-entry3.ts"
     }
   },
   "types": "./src/remote-entry.ts"
- 
 }

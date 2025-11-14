@@ -1,11 +1,11 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from 'react-router-dom';
 
 const InnerLayout = () => {
   return (
     <div>
-        <Outlet />
+      <Outlet />
     </div>
-  )
-}
+  );
+};
 
-export default InnerLayout
+export default InnerLayout;

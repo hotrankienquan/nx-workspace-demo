@@ -1,9 +1,7 @@
 import ClaimPilotLayout from './layouts/layout';
 
 export function App() {
-  return (
-      <ClaimPilotLayout />
-  );
+  return <ClaimPilotLayout />;
 }
 
 export default App;
