@@ -10,19 +10,19 @@ import { Alert, Box, Button, Container, Divider, Paper, Typography } from "@mui/
 import StageNavigation from "../../../features/detail-claims/components/StageNavigation";
 import DynamicField from "../../../features/detail-claims/components/DynamicField";
 import {
-
     ArrowBack as ArrowBackIcon,
     ArrowForward as ArrowForwardIcon,
     Check as CheckIcon
 } from '@mui/icons-material';
-
-
 
 const DetailClaimsPage = () => {
     const { id = "" } = useParams<{ id: string }>();
     
     const [currentStageIndex, setCurrentStageIndex] = useState(0);
     const [completedStages, setCompletedStages] = useState<Set<number>>(new Set());
+    
+    // ✅ Thêm state để lưu tất cả data từ các stages
+    const [allStagesData, setAllStagesData] = useState<Record<string, Record<string, any>>>({});
 
     const {
         data: formConfig,
@@ -30,75 +30,120 @@ const DetailClaimsPage = () => {
         error: configError
     } = useClaimForm(id);
     
-    const { data: claimData } = useClaimData(id)
-    if (isLoading || !formConfig) {
-        return <Loading />
-    }
-    const currentStage = formConfig && formConfig?.stages[currentStageIndex];
-    
-
-
-    if (configError || !formConfig || !currentStage) {
-        return (<ErrorClaimsComp />)
-    }
-
+    const { data: claimData } = useClaimData(id);
     const actionSaveStageMutation = useSaveClaimStage();
-    
-    
-    const validationSchema = useMemo(() => currentStage ? buildValidationSchema(currentStage.fields) : undefined, [currentStage]); // build validation schema based on current stage fields
 
+    const currentStage = formConfig?.stages?.[currentStageIndex];
+    
+    const validationSchema = useMemo(
+        () => currentStage ? buildValidationSchema(currentStage.fields) : undefined, 
+        [currentStage]
+    );
 
     const {
         control,
         handleSubmit,
         formState: { errors, isValid },
-        reset
+        reset,
+        trigger
     } = useForm({
         resolver: validationSchema ? yupResolver(validationSchema) : undefined,
         mode: 'onChange',
         defaultValues: claimData?.[currentStage?.id || ''] || {}
     });
 
+    useEffect(() => {
+        if (currentStage && claimData?.[currentStage.id]) {
+            reset(claimData[currentStage.id]);
+            trigger();
+        }
+    }, [currentStage, claimData, reset, trigger]);
+
+    // ✅ Load existing data vào allStagesData khi component mount
+    useEffect(() => {
+        if (claimData) {
+            setAllStagesData(claimData);
+        }
+    }, [claimData]);
+
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    if (configError || !formConfig || !formConfig.stages || !currentStage) {
+        return <ErrorClaimsComp />;
+    }
+
     const onSubmit = async (data: Record<string, any>) => {
+        console.log('Current stage data:', data);
+        
         if (!currentStage) return;
+
+        // ✅ Lưu data của stage hiện tại vào allStagesData
+        const updatedAllData = {
+            ...allStagesData,
+            [currentStage.id]: data
+        };
+        setAllStagesData(updatedAllData);
+
+        console.log('All stages data so far:', updatedAllData);
 
         try {
             await actionSaveStageMutation.mutateAsync({
-                claimId:id,
+                claimId: id,
                 stageId: currentStage.id,
                 data
             });
 
-            // Mark current stage as completed
             setCompletedStages(prev => new Set(prev).add(currentStageIndex));
 
-            // Move to next stage if exists
-            if (currentStageIndex < (formConfig?.stages.length || 0) - 1) {
+            const isLastStage = currentStageIndex === formConfig.stages.length - 1;
+
+            if (isLastStage) {
+                // ✅ Nếu là stage cuối, log tất cả data
+                console.log('=== FINAL SUBMISSION ===');
+                console.log('All stages data:', updatedAllData);
+                
+                // ✅ Hoặc gộp tất cả data thành một object flat
+                const flattenedData = Object.values(updatedAllData).reduce((acc, stageData) => {
+                    return { ...acc, ...stageData };
+                }, {});
+                
+                console.log('Flattened data:', flattenedData);
+                
+                // ✅ Gọi API submit final claim (nếu có)
+                // await submitFinalClaim({ claimId: id, data: updatedAllData });
+                
+            } else {
+                // Move to next stage
                 setCurrentStageIndex(prev => prev + 1);
             }
-
         } catch (error) {
             console.error("Error saving stage data:", error);
         }
-    }
+    };
 
     const handlePrevious = () => {
         setCurrentStageIndex(Math.max(0, currentStageIndex - 1));
-    }
-    useEffect(() => {
-        if (currentStage && claimData?.[currentStage.id]) {
-            reset(claimData[currentStage.id])
-        }
-    }, [currentStage, claimData, reset])
+    };
 
-
-   
     const isLastStage = formConfig.stages.length - 1 === currentStageIndex;
 
+    console.log({
+        isValid,
+        actionSaveStageMutation,
+        errors,
+        allStagesData // ✅ Log để debug
+    });
+
     return (
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Typography variant='h3' component="h1" fontWeight="bold" gutterBottom>Claims Detail</Typography>
-            <Typography variant='subtitle1' color='text.secondary' gutterBottom sx={{mb:4}}>Claim ID: {id}</Typography>
+        <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
+            <Typography variant='h3' component="h1" fontWeight="bold" gutterBottom>
+                Claims Detail
+            </Typography>
+            <Typography variant='subtitle1' color='text.secondary' gutterBottom sx={{mb:4}}>
+                Claim ID: {id}
+            </Typography>
 
             <StageNavigation 
                 stages={formConfig.stages}
@@ -107,58 +152,67 @@ const DetailClaimsPage = () => {
                 onNavigate={setCurrentStageIndex}
             />
 
-            {/* Paper zone */}
-
             <Paper elevation={3} sx={{p:4}}>
                 <Typography variant='h4' component="h2" gutterBottom>
                     {currentStage.title}
                 </Typography>
-                {currentStage.description && (<Typography variant='body1' color='text.secondary' paragraph>
-                    {currentStage.description}
-                </Typography>
-            )}
+                {currentStage.description && (
+                    <Typography variant='body1' color='text.secondary' paragraph>
+                        {currentStage.description}
+                    </Typography>
+                )}
 
-            <Divider sx={{my:3}}/>
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-            >
-
-                <Box sx={{mb:3}}>
-                    {currentStage.fields.map(field =>(
-                        <DynamicField 
-                            key={field.id}
-                            field={field}
-                            control={control}
-                            error={errors[field.id]}
-                        />
-                    ))}
-                </Box>
                 <Divider sx={{my:3}}/>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Button variant='outlined' startIcon={<ArrowBackIcon />}
-                    onClick={handlePrevious}
-                    disabled={currentStageIndex === 0}
-                    size='large'
-                    >
-                        Previous
-                    </Button>
-                    <Button type="submit" variant='contained'
-                    endIcon
-                    ={isLastStage ? <CheckIcon /> : <ArrowForwardIcon />}
-                    disabled={!isValid || actionSaveStageMutation.isPending}
-                    size='large'
-                    >
-                        {actionSaveStageMutation.isPending ? 'Saving...' : isLastStage ? 'Submit claim' : 'Save and continue'}
-                    </Button>
-                </Box>
-            </form>
+                
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Box sx={{mb:3}}>
+                        {currentStage.fields.map(field => (
+                            <DynamicField 
+                                key={field.id}
+                                field={field}
+                                control={control}
+                                error={errors[field.id]}
+                            />
+                        ))}
+                    </Box>
+                    
+                    <Divider sx={{my:3}}/>
+                    
+                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                        <Button 
+                            variant='outlined' 
+                            startIcon={<ArrowBackIcon />}
+                            onClick={handlePrevious}
+                            disabled={currentStageIndex === 0}
+                            size='large'
+                        >
+                            Previous
+                        </Button>
+                        <Button 
+                            type="submit" 
+                            variant='contained'
+                            endIcon={isLastStage ? <CheckIcon /> : <ArrowForwardIcon />}
+                            disabled={!isValid || actionSaveStageMutation.isPending}
+                            size='large'
+                        >
+                            {actionSaveStageMutation.isPending 
+                                ? 'Saving...' 
+                                : isLastStage 
+                                    ? 'Submit claim' 
+                                    : 'Save and continue'
+                            }
+                        </Button>
+                    </Box>
+                </form>
 
-            {actionSaveStageMutation.isError && (<Alert severity='error' sx={{mt:2}}>
-                Failed to save data for this stage. Please try again.
-            </Alert>)}
+                {actionSaveStageMutation.isError && (
+                    <Alert severity='error' sx={{mt:2}}>
+                        Failed to save data for this stage. Please try again.
+                    </Alert>
+                )}
             </Paper>
         </Container>
-    )
-}
+    );
+};
 
 export default DetailClaimsPage;

@@ -75,6 +75,53 @@ export const CLAIM_FORM_CONFIG_DATA_MOCK: ClaimFormConfig = {
                 { id: 'phone', label: 'Phone Number', type: 'text', placeholder: 'Enter your phone number', validation: { required: true, pattern: 'phone' }, options: [] },
 
             ],
+        },
+        {
+            id: 'personal info 2',
+            title: 'Personal Information 2',
+            description: 'Provide your personal details',
+            fields: [
+                {
+                    id: 'fullName2',
+                    label: 'Country',
+                    type: 'dropdown',
+                    validation: { required: true },
+                    placeholder: 'Select your country',
+                    options: [
+                        { value: 'vn', label: 'Vietnam' },
+                        { value: 'us', label: 'United States' },
+                        { value: 'uk', label: 'United Kingdom' },
+                        { value: 'au', label: 'Australia' },
+                        { value: 'ca', label: 'Canada' },
+                        { value: 'sg', label: 'Singapore' },
+                        { value: 'jp', label: 'Japan' },
+                        { value: 'kr', label: 'South Korea' },
+                        { value: 'th', label: 'Thailand' },
+                        { value: 'my', label: 'Malaysia' }
+                    ],
+                },
+                {
+                    id: 'email',
+                    label: 'Gender',
+                    type: 'radio',
+                    validation: { required: true },
+                    options: [
+                        { value: 'male', label: 'Male' },
+                        { value: 'female', label: 'Female' },
+                        { value: 'other', label: 'Other' },
+                        { value: 'prefer-not-to-say', label: 'Prefer not to say' }
+                    ],
+                    placeholder: 'Select your gender',
+                },
+                {
+                    id: 'phone',
+                    label: 'Phone Number',
+                    type: 'text',
+                    placeholder: 'Enter your phone number',
+                    validation: { required: true, pattern: 'phone' },
+                    options: []
+                },
+            ],
         }
     ]
 }

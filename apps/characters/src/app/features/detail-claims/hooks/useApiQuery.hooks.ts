@@ -9,11 +9,13 @@ export function useApiQuery<T>(
 ): UseQueryResult<T> {
     return useQuery<T>({
         queryKey,
-        queryFn: () => apiClient.get(url),
+        queryFn: async () => {
+            const response = await apiClient.get<T>(url);
+            return response.data;
+        },
         staleTime: options?.staleTime ?? 1000 * 60 * 5,
     });
 }
-
 
 export function useApiQueryMutation() {
     return useMutation({

@@ -7,7 +7,9 @@ import '@testing-library/jest-dom';
 import { ContentClaimsProps, IListClaims } from '../types/interface/list-claims';
 
 const renderWithRouter = (ui: React.ReactNode) =>
-  render(<BrowserRouter>{ui}</BrowserRouter>);
+  render(<BrowserRouter future={{ 
+    v7_relativeSplatPath: true, 
+  }}>{ui}</BrowserRouter>);
 
 describe("ContentClaims component", () => {
   const baseProps: ContentClaimsProps = {

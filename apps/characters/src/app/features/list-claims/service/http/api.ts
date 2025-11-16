@@ -4,7 +4,7 @@ import { CategoryType } from "../../types/types";
 
 
 export async function fetchClaims(category: Partial<CategoryType>) {
-  const url = category ? `/claims?category=${category}` : '/claims';
+  const url = category ? `/claims?claimId=${category}` : '/claims';
 
   try {
     const response = await apiClient.get<IListClaims[]>(url);
