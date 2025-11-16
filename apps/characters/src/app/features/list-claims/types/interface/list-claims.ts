@@ -16,3 +16,11 @@ export interface ClaimsStore {
     setActiveCategory: (category: CategoryType) => void;
     refetch: (options?: RefetchOptions) => Promise<QueryObserverResult<IListClaims[], Error>>
 }
+
+
+export interface ContentClaimsProps {
+    claims: IListClaims[] | null | undefined;
+    loading: boolean | undefined;
+    error: Error | null | undefined;
+    activeCategory: CategoryType | undefined;
+}

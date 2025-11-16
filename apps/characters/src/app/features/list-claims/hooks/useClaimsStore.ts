@@ -1,17 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { ClaimsStore, IListClaims } from "../types/interface/list-claims";
 import { CategoryType } from "../types/types";
-import { API_CLAIMS_URL } from "../utils/constants";
 import { useState } from "react";
+import { fetchClaims } from "../service/http/api";
 
-export async function fetchClaims(category: Partial<CategoryType>): Promise<IListClaims[]> {
-    const url = category ? `${API_CLAIMS_URL}?category=${category}` : API_CLAIMS_URL;
-    const res = await fetch(url);
-    if (!res.ok) {
-        throw new Error('Failed to fetch claims');
-    }
-    return res.json();
-}
 
 export function useClaimsStore(category: CategoryType): Partial<ClaimsStore> {
     const { data, error, isLoading, refetch } = useQuery<IListClaims[]>({
@@ -20,7 +12,10 @@ export function useClaimsStore(category: CategoryType): Partial<ClaimsStore> {
         staleTime: 1000 * 60 * 5,
     });
 
-    const [activeCategory, setActiveCategory] = useState<CategoryType>(category || "Motor");
+    console.log({data, error, isLoading});
+    
+
+    const [activeCategory, setActiveCategory] = useState<CategoryType>(category);
 
     return {
         claims: data ?? [],

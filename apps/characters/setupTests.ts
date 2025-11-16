@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { server } from './app/__mocks__/server';
+import { server } from './src/app/__mocks__/server';
 
 import 'whatwg-fetch';
 

@@ -5,12 +5,11 @@ import { ClaimFormConfig } from "../types/claims.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchPostSaveStage } from "../utils/fetcher";
 
-const API_BASE_URL = 'https://new-ui/api';
 
 export const useClaimForm = (claimId: string) => {
   return useApiQuery<ClaimFormConfig>(
     ['claimForm', claimId],
-    `${API_BASE_URL}/claims/form-config?claimId=${claimId}`
+    `/claims/form-config?claimId=${claimId}`
   );
 };
 
@@ -19,7 +18,7 @@ export const useClaimForm = (claimId: string) => {
 export const useClaimData = (claimId: string) => {
   return useApiQuery<Record<string, any>>(
     ['claimData', claimId],
-    `${API_BASE_URL}/claims?claimId=${claimId}`
+    `/claims?claimId=${claimId}`
   );
 }
 // 

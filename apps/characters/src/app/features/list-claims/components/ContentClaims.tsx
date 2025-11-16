@@ -1,19 +1,11 @@
-import { Box, Breadcrumbs, Card, CardContent, Link, Typography, CircularProgress, Alert, useTheme } from '@mui/material';
+import { Alert, Box, Breadcrumbs, Card, CardContent, CircularProgress, Link, Typography, useTheme } from '@mui/material'
+import { ContentClaimsProps } from '../types/interface/list-claims';
+import { DETAIL_CLAIMS_PATH } from '../utils/constants';
+import {Link as RouterDomLink} from 'react-router-dom'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import { useClaimsStore } from '../hooks/useClaimsStore';
-import SidebarInstruct from './SidebarInstruct';
 
-import { Link as RouterDomLink } from 'react-router-dom'
-import { DETAIL_CLAIMS } from '../utils/constants';
-
-import './styles.css'
-
-const ContentInstruct = () => {
-    const { claims, loading, error, activeCategory, setActiveCategory } = useClaimsStore("Motor");
-    console.log({ claims, loading, error, activeCategory });
-
+const ContentClaims = ({loading,activeCategory, claims,error}:ContentClaimsProps) => {
     const theme = useTheme();
-
     const renderContent = () => {
         if (loading) {
             return (
@@ -44,7 +36,7 @@ const ContentInstruct = () => {
             <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
                 {claims.map((c) => (
                     <Card key={c.id} sx={{ width: 300, minHeight: 200, display: 'flex', flexDirection: 'column', boxShadow: 3, borderRadius: 2 }}>
-                        <RouterDomLink to={`${DETAIL_CLAIMS}/${c.id}`} className='no-underline'>
+                        <RouterDomLink to={`${DETAIL_CLAIMS_PATH}/${c.id}`} className='no-underline'>
                             <CardContent sx={{ flexGrow: 1, textAlign: 'center', p: 4 }}>
                                 <Box sx={{ backgroundColor: theme.palette.background.paper, borderRadius: 1, p: 2, mb: 2 }}>
                                     <DirectionsCarIcon sx={{ fontSize: 40, color: "text.secondary" }} />
@@ -62,12 +54,8 @@ const ContentInstruct = () => {
             </Box>
         );
     };
-
-    return (
-        <Box sx={{ display: 'flex', height: '100%' }}>
-
-            <SidebarInstruct setActiveCategory={setActiveCategory!!} />
-            <Box
+  return (
+           <Box
                 component="main"
                 sx={{
                     flexGrow: 1,
@@ -92,8 +80,7 @@ const ContentInstruct = () => {
                 {renderContent()}
 
             </Box>
-        </Box>
-    );
-};
+  )
+}
 
-export default ContentInstruct;
+export default ContentClaims

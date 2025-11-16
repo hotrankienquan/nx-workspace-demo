@@ -1,5 +1,6 @@
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
-import { fetcher, fetchPostSaveStage } from '../utils/fetcher';
+import { fetchPostSaveStage } from '../utils/fetcher';
+import apiClient from '../../../globals/service/http/apiClient';
 
 export function useApiQuery<T>(
     queryKey: (string | number)[],
@@ -8,7 +9,7 @@ export function useApiQuery<T>(
 ): UseQueryResult<T> {
     return useQuery<T>({
         queryKey,
-        queryFn: () => fetcher<T>(url),
+        queryFn: () => apiClient.get(url),
         staleTime: options?.staleTime ?? 1000 * 60 * 5,
     });
 }

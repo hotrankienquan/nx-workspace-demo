@@ -1,5 +1,14 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useClaimData, useClaimForm, useSaveClaimStage } from "../../../features/detail-claims/hooks/useClaims.hooks";
+import { buildValidationSchema } from "../../../features/detail-claims/utils/validation.utils";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Loading from "../../../features/detail-claims/components/Loading";
+import ErrorClaimsComp from "../../../features/detail-claims/components/ErrorClaimsComp";
+import { Alert, Box, Button, Container, Divider, Paper, Typography } from "@mui/material";
+import StageNavigation from "../../../features/detail-claims/components/StageNavigation";
+import DynamicField from "../../../features/detail-claims/components/DynamicField";
 import {
 
     ArrowBack as ArrowBackIcon,
@@ -7,18 +16,11 @@ import {
     Check as CheckIcon
 } from '@mui/icons-material';
 
-import { ClaimDetailPageProps } from '../../list-claims/types/interface/detail-claims'
-import { useEffect, useMemo, useState } from 'react';
-import { useClaimData, useClaimForm, useSaveClaimStage } from '../hooks/useClaims.hooks';
-import { buildValidationSchema } from '../utils/validation.utils';
-import { useForm } from 'react-hook-form';
-import Loading from './Loading';
-import { Alert, Box, Button, Container, Divider, Paper, Typography } from '@mui/material';
-import ErrorClaimsComp from './ErrorClaimsComp';
-import StageNavigation from './StageNavigation';
-import DynamicField from './DynamicField';
-const ClaimsDetailPage: React.FC<ClaimDetailPageProps> = ({ claimId }) => {
 
+
+const DetailClaimsPage = () => {
+    const { id = "" } = useParams<{ id: string }>();
+    
     const [currentStageIndex, setCurrentStageIndex] = useState(0);
     const [completedStages, setCompletedStages] = useState<Set<number>>(new Set());
 
@@ -26,13 +28,25 @@ const ClaimsDetailPage: React.FC<ClaimDetailPageProps> = ({ claimId }) => {
         data: formConfig,
         isLoading,
         error: configError
-    } = useClaimForm(claimId)
+    } = useClaimForm(id);
+    
+    const { data: claimData } = useClaimData(id)
+    if (isLoading || !formConfig) {
+        return <Loading />
+    }
+    const currentStage = formConfig && formConfig?.stages[currentStageIndex];
+    
 
-    const { data: claimData } = useClaimData(claimId)
+
+    if (configError || !formConfig || !currentStage) {
+        return (<ErrorClaimsComp />)
+    }
 
     const actionSaveStageMutation = useSaveClaimStage();
-    const currentStage = formConfig?.stages[currentStageIndex];
-
+    console.log({formConfig});
+    
+    console.log({currentStageIndex, formConfig});
+    
     const validationSchema = useMemo(() => currentStage ? buildValidationSchema(currentStage.fields) : undefined, [currentStage]); // build validation schema based on current stage fields
 
 
@@ -52,7 +66,7 @@ const ClaimsDetailPage: React.FC<ClaimDetailPageProps> = ({ claimId }) => {
 
         try {
             await actionSaveStageMutation.mutateAsync({
-                claimId,
+                claimId:id,
                 stageId: currentStage.id,
                 data
             });
@@ -80,13 +94,7 @@ const ClaimsDetailPage: React.FC<ClaimDetailPageProps> = ({ claimId }) => {
     }, [currentStage, claimData, reset])
 
 
-    if (isLoading) {
-        return <Loading />
-    }
-
-    if (configError || !formConfig || !currentStage) {
-        return (<ErrorClaimsComp />)
-    }
+   
     const isLastStage = formConfig.stages.length - 1 === currentStageIndex;
 
     return (
@@ -95,7 +103,7 @@ const ClaimsDetailPage: React.FC<ClaimDetailPageProps> = ({ claimId }) => {
                 Claims Detail
             </Typography>
             <Typography variant='subtitle1' color='text.secondary' gutterBottom sx={{mb:4}}>
-                Claim ID: {claimId}
+                Claim ID: {id}
             </Typography>
 
             <StageNavigation 
@@ -159,4 +167,4 @@ const ClaimsDetailPage: React.FC<ClaimDetailPageProps> = ({ claimId }) => {
     )
 }
 
-export default ClaimsDetailPage
+export default DetailClaimsPage;

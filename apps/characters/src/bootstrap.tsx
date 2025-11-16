@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import Layout from './app/layouts/layout';
+import RootEntryPoint from './app/app/app';
 
 
 async function enableMocking() {
@@ -29,7 +29,7 @@ enableMocking().then(() => {
   root.render(
     <StrictMode>
         <ThemeProvider theme={theme}>
-          <Layout />
+          <RootEntryPoint />
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={true} />
     </StrictMode>

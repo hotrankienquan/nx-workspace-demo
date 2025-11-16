@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../../__mocks__/libs/handlers";
+import { BASE_URL_APP } from "../../../globals/constants";
 
 export async function fetcher<T>(url: string): Promise<T> {
     const res = await fetch(url);
@@ -10,7 +10,7 @@ export async function fetcher<T>(url: string): Promise<T> {
 
 
 export async function fetchPostSaveStage(claimId: string, stageId: string, data: Record<string, any>): Promise<void> {
-    const res = await fetch(`${API_BASE_URL}/claims/stage/save/${claimId}/${stageId}}`, {
+    const res = await fetch(`${BASE_URL_APP}/claims/stage/save/${claimId}/${stageId}}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ export async function fetchPostSaveStage(claimId: string, stageId: string, data:
         body: JSON.stringify(data),
     })
     if (!res.ok) {
-        throw new Error(`Failed to post data to: ${API_BASE_URL}/claims/stage/save/${claimId}/${stageId}}`);
+        throw new Error(`Failed to post data to: ${BASE_URL_APP}/claims/stage/save/${claimId}/${stageId}}`);
     }
     return res.json()
 }

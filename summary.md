@@ -93,3 +93,11 @@ features
 2. test coverage
 
 
+
+
+-------------
+
+http://localhost:4200/remote1/detail-claims/m1
+
+
+
