@@ -92,6 +92,8 @@ export const handlers = [
   }),
 
   rest.post(`${BASE_URL_APP}/claims/stage/save/:claimId/:stageId`, (req, res, ctx) => {
+    console.log({req, res, ctx});
+    
     return res(
       ctx.status(200),
       ctx.json({ message: 'Stage data saved successfully' })

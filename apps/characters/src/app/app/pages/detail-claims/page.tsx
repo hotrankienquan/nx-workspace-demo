@@ -21,7 +21,6 @@ const DetailClaimsPage = () => {
     const [currentStageIndex, setCurrentStageIndex] = useState(0);
     const [completedStages, setCompletedStages] = useState<Set<number>>(new Set());
     
-    // ✅ Thêm state để lưu tất cả data từ các stages
     const [allStagesData, setAllStagesData] = useState<Record<string, Record<string, any>>>({});
 
     const {
@@ -59,7 +58,6 @@ const DetailClaimsPage = () => {
         }
     }, [currentStage, claimData, reset, trigger]);
 
-    // ✅ Load existing data vào allStagesData khi component mount
     useEffect(() => {
         if (claimData) {
             setAllStagesData(claimData);
@@ -79,43 +77,40 @@ const DetailClaimsPage = () => {
         
         if (!currentStage) return;
 
-        // ✅ Lưu data của stage hiện tại vào allStagesData
         const updatedAllData = {
             ...allStagesData,
             [currentStage.id]: data
         };
         setAllStagesData(updatedAllData);
 
-        console.log('All stages data so far:', updatedAllData);
-
         try {
-            await actionSaveStageMutation.mutateAsync({
-                claimId: id,
-                stageId: currentStage.id,
-                data
-            });
+            // await actionSaveStageMutation.mutateAsync({
+            //     claimId: id,
+            //     stageId: currentStage.id,
+            //     data
+            // });
 
             setCompletedStages(prev => new Set(prev).add(currentStageIndex));
 
             const isLastStage = currentStageIndex === formConfig.stages.length - 1;
 
             if (isLastStage) {
-                // ✅ Nếu là stage cuối, log tất cả data
                 console.log('=== FINAL SUBMISSION ===');
                 console.log('All stages data:', updatedAllData);
                 
-                // ✅ Hoặc gộp tất cả data thành một object flat
                 const flattenedData = Object.values(updatedAllData).reduce((acc, stageData) => {
                     return { ...acc, ...stageData };
                 }, {});
                 
                 console.log('Flattened data:', flattenedData);
-                
-                // ✅ Gọi API submit final claim (nếu có)
-                // await submitFinalClaim({ claimId: id, data: updatedAllData });
-                
+
+                //submit all data
+                await actionSaveStageMutation.mutateAsync({
+                    claimId: id,
+                    stageId: currentStage.id,
+                    data: flattenedData
+                })
             } else {
-                // Move to next stage
                 setCurrentStageIndex(prev => prev + 1);
             }
         } catch (error) {
@@ -128,14 +123,6 @@ const DetailClaimsPage = () => {
     };
 
     const isLastStage = formConfig.stages.length - 1 === currentStageIndex;
-
-    console.log({
-        isValid,
-        actionSaveStageMutation,
-        errors,
-        allStagesData // ✅ Log để debug
-    });
-
     return (
         <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
             <Typography variant='h3' component="h1" fontWeight="bold" gutterBottom>

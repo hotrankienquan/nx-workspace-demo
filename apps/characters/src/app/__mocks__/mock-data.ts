@@ -72,7 +72,14 @@ export const CLAIM_FORM_CONFIG_DATA_MOCK: ClaimFormConfig = {
                     options: [],
                     placeholder: 'Enter your email address',
                 },
-                { id: 'phone', label: 'Phone Number', type: 'text', placeholder: 'Enter your phone number', validation: { required: true, pattern: 'phone' }, options: [] },
+                {
+                    id: 'phone',
+                    label: 'Phone Number',
+                    type: 'text',
+                    placeholder: 'Enter your phone number',
+                    validation: { required: true, pattern: 'phone' },
+                    options: []
+                },
 
             ],
         },
