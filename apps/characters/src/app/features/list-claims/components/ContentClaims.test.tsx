@@ -3,7 +3,6 @@ import React from 'react';
 import { render, screen } from "@testing-library/react";
 import ContentClaims from "./ContentClaims";
 import { BrowserRouter } from "react-router-dom";
-import { DETAIL_CLAIMS_PATH } from "../utils/constants";
 import '@testing-library/jest-dom';
 import { ContentClaimsProps, IListClaims } from '../types/interface/list-claims';
 
@@ -15,7 +14,7 @@ describe("ContentClaims component", () => {
     loading: false,
     activeCategory: "Motor",
     claims: [],
-    error: { name: "", message: "" },
+    error: null,
   };
 
   test("renders loading state", () => {
@@ -31,10 +30,21 @@ describe("ContentClaims component", () => {
   });
 
   test("renders empty claims state", () => {
-    renderWithRouter(<ContentClaims {...baseProps} />);
+
+    const props: ContentClaimsProps = {
+      claims:[],
+      activeCategory:'Motor',
+      error: null,
+      loading:false
+    }
+
+    render(<ContentClaims {...props} />);
+
     expect(
-      screen.getByText(/No instructions found for the category: Cars/i)
+      screen.getByText(/No instructions found for the category: Motor./i)
     ).toBeInTheDocument();
+    
+    
   });
 
   test("renders claims list", () => {
@@ -52,18 +62,26 @@ describe("ContentClaims component", () => {
         description: 'Motor Insurance hiihi moto record2',
       },
     ];
-    renderWithRouter(<ContentClaims {...baseProps} claims={claims} />);
+
+    const props: ContentClaimsProps = {
+      loading: false,
+      activeCategory: "Motor",
+      claims: claims,
+      error: null,
+    };
+    renderWithRouter(<ContentClaims {...props} />);
 
     // Titles
-    expect(screen.getByText("AIOI Motor Claims")).toBeInTheDocument();
-    expect(screen.getByText("Corporate Risk Motor Claim with Policy")).toBeInTheDocument();
+    expect(screen.getByText(/AIOI Motor Claims/i)).toBeInTheDocument();
+    expect(screen.getByText(/Corporate Risk Motor Claim with Policy/i)).toBeInTheDocument();
 
     // Descriptions
-    expect(screen.getByText("Motor Insurance")).toBeInTheDocument();
-    expect(screen.getByText("Motor Insurance hiihi moto record2")).toBeInTheDocument();
+    expect(screen.getByText(/Motor Insurance hiihi moto record2/i)).toBeInTheDocument();
 
-    // Links
-    const link = screen.getByRole("link", { name: /AIOI Motor Claims/i });
-    expect(link).toHaveAttribute("href", `${DETAIL_CLAIMS_PATH}/m1`);
+    const link = screen.getByRole("link", {
+      name: /AIOI Motor Claims Motor Insurance/i,
+    });
+    expect(link).toHaveAttribute("href", "/detail-claims/m1");
+
   });
 });

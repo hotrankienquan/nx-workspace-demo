@@ -1,3 +1,5 @@
+import type { Config } from 'jest';
+
 export default {
   displayName: 'characters',
   preset: '../../jest.preset.js',
@@ -7,4 +9,7 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: 'test-output/jest/coverage',
-};
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+  ]
+} satisfies Config;

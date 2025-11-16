@@ -43,9 +43,7 @@ const DetailClaimsPage = () => {
     }
 
     const actionSaveStageMutation = useSaveClaimStage();
-    console.log({formConfig});
     
-    console.log({currentStageIndex, formConfig});
     
     const validationSchema = useMemo(() => currentStage ? buildValidationSchema(currentStage.fields) : undefined, [currentStage]); // build validation schema based on current stage fields
 
@@ -99,12 +97,8 @@ const DetailClaimsPage = () => {
 
     return (
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Typography variant='h3' component="h1" fontWeight="bold" gutterBottom>
-                Claims Detail
-            </Typography>
-            <Typography variant='subtitle1' color='text.secondary' gutterBottom sx={{mb:4}}>
-                Claim ID: {id}
-            </Typography>
+            <Typography variant='h3' component="h1" fontWeight="bold" gutterBottom>Claims Detail</Typography>
+            <Typography variant='subtitle1' color='text.secondary' gutterBottom sx={{mb:4}}>Claim ID: {id}</Typography>
 
             <StageNavigation 
                 stages={formConfig.stages}

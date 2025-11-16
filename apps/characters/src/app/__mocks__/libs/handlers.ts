@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 import { ClaimFormConfig } from '../../features/detail-claims/types/claims.type';
 import { BASE_URL_APP } from '../../globals/constants';
-import { CLAIMS_DATA_MOCK, MOCK_CLAIM_DATA_GENERAL, MOCK_CLAIM_DATA_M1 } from '../mock-data';
+import { CLAIM_FORM_CONFIG_DATA_MOCK, CLAIMS_DATA_MOCK, MOCK_CLAIM_DATA_GENERAL, MOCK_CLAIM_DATA_M1 } from '../mock-data';
 
 
 export const handlers = [
@@ -30,50 +30,7 @@ export const handlers = [
     if (claimId === 'm1') {
       return res(
         ctx.status(200),
-        ctx.json({
-          claimId,
-          stages: [
-            {
-              id: 'stage1',
-              title: 'Motor Claim Stage',
-              description: 'Provide accident and vehicle details',
-              fields: [
-                {
-                  id: 'f1',
-                  label: 'Accident Date',
-                  type: 'date',
-                  validation: { required: true },
-                  options: [],
-                  placeholder: 'Select accident date',
-                },
-                {
-                  id: 'f2',
-                  label: 'Vehicle Make',
-                  type: 'text',
-                  validation: { required: true, minLength: 2 },
-                  options: [],
-                  placeholder: 'Enter vehicle make',
-                },
-                {
-                  id: 'f3',
-                  label: 'Vehicle Model',
-                  type: 'text',
-                  validation: { required: true, minLength: 2 },
-                  options: [],
-                  placeholder: 'Enter vehicle model',
-                },
-                {
-                  id: 'f4',
-                  label: 'Description of Incident',
-                  type: 'textarea',
-                  validation: { required: true, minLength: 10 },
-                  options: [],
-                  placeholder: 'Describe what happened',
-                },
-              ],
-            },
-          ],
-        })
+        ctx.json(CLAIM_FORM_CONFIG_DATA_MOCK)
       );
     }
 
