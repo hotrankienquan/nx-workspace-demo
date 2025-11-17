@@ -17,7 +17,7 @@ export interface FieldOption {
     value: string;
 }
 
-export interface FormField{
+export interface FormField {
     id: string;
     label:string;
     type: FieldType;

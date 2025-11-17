@@ -45,7 +45,6 @@ const DynamicField: React.FC<DynamicFieldProps> = (
                             error={!!error}
                             helperText={error?.message as React.ReactNode}
                             required={validation?.required}
-
                             onChange={e => {
                                 const value = e.target.value;
                                 const numericValue = value === '' ? '' : Number(value);
@@ -62,7 +61,6 @@ const DynamicField: React.FC<DynamicFieldProps> = (
                     render={({ field: controllerField }) => (
                         <FormControl fullWidth error={!!error}>
                             <InputLabel required={validation?.required}
-
                             >
                                 {label}
                             </InputLabel>
@@ -86,11 +84,11 @@ const DynamicField: React.FC<DynamicFieldProps> = (
                     control={control}
                     defaultValue=""
                     render={({ field: controllerField }) => (
-                        <FormControl error={!!error} required={validation?.required}
-
+                        <FormControl 
+                            error={!!error} 
+                            required={validation?.required}
                         >
                             <FormLabel>{label}</FormLabel>
-                            {/* Radio buttons implementation goes here */}
                             <RadioGroup {...controllerField}>
                                 {options?.map(option => (
                                     <FormControlLabel
@@ -123,7 +121,6 @@ const DynamicField: React.FC<DynamicFieldProps> = (
                             multiline
                             rows={4}
                         />
-
                     )}
                 />)
             default:

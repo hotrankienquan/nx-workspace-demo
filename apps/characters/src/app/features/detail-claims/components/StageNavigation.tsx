@@ -1,10 +1,8 @@
-
-
-
 import React from 'react'
 import { StateNavigationProps } from '../../list-claims/types/interface/stage-navigation'
 import { Box, Chip, Step, StepButton, StepLabel, Stepper } from '@mui/material';
 import { CheckCircle as CheckCircleIcon, Lock as LockIcon } from '@mui/icons-material'
+
 const StageNavigation: React.FC<StateNavigationProps> = ({ completedStages, currentStageIndex, onNavigate, stages }) => {
 
     const canNavigate = (index: number): boolean => {
