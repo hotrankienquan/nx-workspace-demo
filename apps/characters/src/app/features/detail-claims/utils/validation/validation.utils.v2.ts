@@ -3,7 +3,7 @@ import { FormField } from '../../types/claims.type';
 import { getBaseSchema } from './base-schema';
 import { applyConstraints } from './constraints/constraint-factory';
 
-export const buildValidationSchema = (fields: FormField[]) => {
+export const buildValidationSchemaVer2 = (fields: FormField[]) => {
     const schemaFields: Record<string, yup.AnySchema> = {};
 
     fields.forEach((field) => {

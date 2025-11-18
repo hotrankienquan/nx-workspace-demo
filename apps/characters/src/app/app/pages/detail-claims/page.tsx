@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useClaimData, useClaimForm, useSaveClaimStage } from "../../../features/detail-claims/hooks/useClaims.hooks";
-import { buildValidationSchema } from "../../../features/detail-claims/utils/validation.utils";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Loading from "../../../features/detail-claims/components/Loading";
@@ -14,6 +13,7 @@ import {
     ArrowForward as ArrowForwardIcon,
     Check as CheckIcon
 } from '@mui/icons-material';
+import { buildValidationSchemaVer2 } from "../../../features/detail-claims/utils/validation/validation.utils.v2";
 
 const DetailClaimsPage = () => {
     const { id = "" } = useParams<{ id: string }>();
@@ -35,7 +35,7 @@ const DetailClaimsPage = () => {
     const currentStage = formConfig?.stages?.[currentStageIndex];
     
     const validationSchema = useMemo(
-        () => currentStage ? buildValidationSchema(currentStage.fields) : undefined, 
+        () => currentStage ? buildValidationSchemaVer2(currentStage.fields) : undefined, 
         [currentStage]
     );
 

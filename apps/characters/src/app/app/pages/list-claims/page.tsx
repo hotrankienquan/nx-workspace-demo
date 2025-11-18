@@ -6,8 +6,7 @@ import ContentClaims from '../../../features/list-claims/components/ContentClaim
 const ListClaimsPage = () => {
 
     const { claims, loading, error, activeCategory, setActiveCategory } = useClaimsStore("Motor");
-    console.log({ claims, loading, error, activeCategory });
-    
+  
     return (
         <Box sx={{ display: 'flex', height: '100%' }}>
             <SidebarInstruct setActiveCategory={setActiveCategory!!} />
