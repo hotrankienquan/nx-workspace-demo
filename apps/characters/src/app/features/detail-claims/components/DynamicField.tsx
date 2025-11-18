@@ -60,7 +60,9 @@ const DynamicField: React.FC<DynamicFieldProps> = (
                     defaultValue=""
                     render={({ field: controllerField }) => (
                         <FormControl fullWidth error={!!error}>
-                            <InputLabel required={validation?.required}
+                            <InputLabel
+                            id={`${id}-label`}
+                            required={validation?.required}
                             >
                                 {label}
                             </InputLabel>
@@ -68,6 +70,8 @@ const DynamicField: React.FC<DynamicFieldProps> = (
                             <Select
                                 {...controllerField}
                                 label={label}
+                                labelId={`${id}-label`}
+                                id={id}
                             >
                                 {options?.map(option => (<MenuItem key={option.value} value={option.value}>
                                     {option.label}
@@ -84,8 +88,8 @@ const DynamicField: React.FC<DynamicFieldProps> = (
                     control={control}
                     defaultValue=""
                     render={({ field: controllerField }) => (
-                        <FormControl 
-                            error={!!error} 
+                        <FormControl
+                            error={!!error}
                             required={validation?.required}
                         >
                             <FormLabel>{label}</FormLabel>

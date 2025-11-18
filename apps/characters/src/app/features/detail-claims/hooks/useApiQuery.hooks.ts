@@ -1,5 +1,5 @@
-import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
-import { fetchPostSaveStage } from '../utils/fetcher';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+
 import apiClient from '../../../globals/service/http/apiClient';
 
 export function useApiQuery<T>(
@@ -17,9 +17,3 @@ export function useApiQuery<T>(
     });
 }
 
-export function useApiQueryMutation() {
-    return useMutation({
-        mutationFn: ({ claimId, stageId, data }: { claimId: string; stageId: string; data: Record<string, any> }) =>
-            fetchPostSaveStage(claimId, stageId, data),
-    });
-}

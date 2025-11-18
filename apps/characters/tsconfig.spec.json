@@ -8,7 +8,14 @@
       "node",
       "@nx/react/typings/cssmodule.d.ts",
       "@nx/react/typings/image.d.ts"
-    ]
+    ],
+    "module": "preserve", // Hoặc "es2022", "nodeNext", hoặc "preserve"
+
+    "moduleResolution": "bundler", // Hoặc "nodeNext", "bundler" (nếu bạn muốn dùng 'bundler')
+
+    "target": "es2020",
+
+    "esModuleInterop": true
   },
   "include": [
     "jest.config.ts",
@@ -20,7 +27,9 @@
     "src/**/*.spec.js",
     "src/**/*.test.jsx",
     "src/**/*.spec.jsx",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "src/app/globals/utils/tests/RenderWithForm.tsx",
+    
   ],
   "references": [
     {

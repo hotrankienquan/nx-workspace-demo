@@ -11,6 +11,13 @@
       "@nx/react/typings/image.d.ts"
     ],
     // "rootDir": "src"
+    "module": "preserve", // Hoặc "es2022", "nodeNext", hoặc "preserve"
+    
+    "moduleResolution": "bundler", // Hoặc "nodeNext", "bundler" (nếu bạn muốn dùng 'bundler')
+    
+    "target": "es2020",
+    
+    "esModuleInterop": true
   },
   "exclude": [
     "out-tsc",

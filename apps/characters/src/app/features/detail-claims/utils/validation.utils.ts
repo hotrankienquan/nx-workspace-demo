@@ -61,6 +61,9 @@ export const buildValidationSchema = (fields: FormField[]) => {
         if (validation.max !== undefined && fieldSchema instanceof yup.NumberSchema) {
             fieldSchema = fieldSchema.max(validation.max, `${field.label} must be at most ${validation.max}`);
         }
+
+
+        
         schemaFields[field.id] = fieldSchema;
 
     });

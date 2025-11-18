@@ -84,11 +84,6 @@ const DetailClaimsPage = () => {
         setAllStagesData(updatedAllData);
 
         try {
-            // await actionSaveStageMutation.mutateAsync({
-            //     claimId: id,
-            //     stageId: currentStage.id,
-            //     data
-            // });
 
             setCompletedStages(prev => new Set(prev).add(currentStageIndex));
 
@@ -104,7 +99,6 @@ const DetailClaimsPage = () => {
                 
                 console.log('Flattened data:', flattenedData);
 
-                //submit all data
                 await actionSaveStageMutation.mutateAsync({
                     claimId: id,
                     stageId: currentStage.id,

@@ -66,6 +66,25 @@ My goals for Tomorrow:
 - Claims form will have multiple stages
   - Each stage will have a list of question, user can only navigate to next stage only if all the current required questions has been input
 
+Report
+What I Learned Today:
+- Handle multiple stages and dynamic forms
+
+Challenge:
+-Clean code dynamic forms
+
+How I Solved Them:
+-I try my best
+
+My Moood Meter:
+-Alright
+
+Proud Moments:
+- I'm proud of today because i can do it by myself.
+
+My goals for Tomorrow:
+- Do things better
+
 5. Day five
 - User can quickly jump to all completed page
 
@@ -73,7 +92,30 @@ My goals for Tomorrow:
 
 - Dynamic form can add/edit depend on api structure, please use react hook form and yup
 
+Day 5:
+Improve Code coverage to 50% at least
+Refactor core services (FieldRender, buildYupSchema,...)
+What I Learned Today:
+- Do not need to test hook useApiQuery.
+- Separate code Validation schema and Builder Form Field
+- Unit test for new Validation utils
+- Check error run test with coverage in vscode
 
+
+Challenge:
+-Clean code
+
+How I Solved Them:
+-I try my best
+
+My Moood Meter:
+-Alright
+
+Proud Moments:
+- I'm proud of today because i can do it by myself.
+
+My goals for Tomorrow:
+- Do things better
 
 -------------
 
@@ -99,5 +141,9 @@ features
 
 http://localhost:4200/remote1/detail-claims/m1
 
+
+
+--------------
+nx test characters --testFile=src/app/features/detail-claims/hooks/useClaims.hook.test.tsx
 
 

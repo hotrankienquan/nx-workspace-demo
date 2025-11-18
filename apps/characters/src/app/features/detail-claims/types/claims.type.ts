@@ -2,33 +2,32 @@
 
 export type FieldType = 'text' | 'number' | 'dropdown' | 'radio' | 'textarea';
 
-//usage:Partilal<ValidationRule>
 export interface ValidationRule {
     required: boolean;
     minLength: number;
     maxLength: number;
-    pattern: 'email'|'phone'|'string';
+    pattern: 'email' | 'phone' | 'string';
     min: number;
-    max:number;
+    max: number;
 }
 
 export interface FieldOption {
-    label:string;
+    label: string;
     value: string;
 }
 
 export interface FormField {
     id: string;
-    label:string;
+    label: string;
     type: FieldType;
     validation: Partial<ValidationRule>;
-    options:Partial<FieldOption>[];
+    options: Partial<FieldOption>[];
     placeholder?: string;
 }
 
-export interface FormStage{
+export interface FormStage {
     id: string;
-    title:string;
+    title: string;
     description?: string;
     fields: FormField[];
 }
@@ -39,19 +38,16 @@ export interface ClaimFormConfig {
 }
 
 export interface ClaimData {
-    [stageId:string]: Record<string, any>;
+    [stageId: string]: Record<string, any>;
 }
 
 
-// One field in the form config
 export interface ClaimFormField {
     name: string;
-    type: 'text' | 'date' | 'textarea'; // restrict to known types
+    type: 'text' | 'date' | 'textarea';
     label: string;
-  }
-  
-  // Full response from /claims/form-config
-  export interface ClaimFormConfigResponse {
+}
+
+export interface ClaimFormConfigResponse {
     fields: ClaimFormField[];
-  }
-  
+}

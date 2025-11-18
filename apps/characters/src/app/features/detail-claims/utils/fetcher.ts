@@ -17,8 +17,6 @@ export async function fetchPostSaveStage(claimId: string, stageId: string, data:
         },
         body: JSON.stringify(data),
     })
-    console.log({res, data});
-    
     if (!res.ok) {
         throw new Error(`Failed to post data to: ${BASE_URL_APP}/claims/stage/save/${claimId}/${stageId}}`);
     }
