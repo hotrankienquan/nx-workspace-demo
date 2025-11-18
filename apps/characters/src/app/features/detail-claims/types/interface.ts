@@ -1,6 +1,6 @@
 import { FormField } from "./claims.type";
 
-import { FieldError, FieldErrorsImpl, Merge, type Control } from "react-hook-form";
+import { FieldError, FieldErrors, FieldErrorsImpl, Merge, type Control } from "react-hook-form";
 import { DynamicFieldTypeV2 } from "./form.type";
 
 export interface DynamicFieldProps {
@@ -46,3 +46,27 @@ export interface SelectableFieldType extends BaseFieldV2 {
     options: FieldOptionV2[];
 }
 
+
+
+export interface ClaimActionBarProps {
+    onPrevious: () => void;
+    disablePrevious: boolean;
+    isLastStage: boolean;
+    isValid: boolean;
+    isSaving: boolean;
+}
+
+export interface ClaimFieldListProps {
+    fields: any[];
+    control: Control<any>;
+    errors: FieldErrors;
+}
+export interface ClaimStageFormProps {
+    stageConfig: any;
+    defaultValues: any;
+    onSubmit: (data: any) => void;
+    onPrevious: () => void;
+    isFirstStage: boolean;
+    isLastStage: boolean;
+    isSaving: boolean;
+}

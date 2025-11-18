@@ -3,7 +3,7 @@ import { Box, CircularProgress, Container } from "@mui/material"
 const Loading = () => {
   return (
     <Container maxWidth="lg" sx={{mt:4, mb:4}}>
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight={400}>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight={400} data-testid="loading-indicator">
             <CircularProgress />
         </Box>
     </Container>

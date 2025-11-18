@@ -1,123 +1,65 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useClaimData, useClaimForm, useSaveClaimStage } from "../../../features/detail-claims/hooks/useClaims.hooks";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { Alert, Container, Paper, Typography } from "@mui/material";
 import Loading from "../../../features/detail-claims/components/Loading";
 import ErrorClaimsComp from "../../../features/detail-claims/components/ErrorClaimsComp";
-import { Alert, Box, Button, Container, Divider, Paper, Typography } from "@mui/material";
 import StageNavigation from "../../../features/detail-claims/components/StageNavigation";
-import {
-    ArrowBack as ArrowBackIcon,
-    ArrowForward as ArrowForwardIcon,
-    Check as CheckIcon
-} from '@mui/icons-material';
-import { buildValidationSchemaVer2 } from "../../../features/detail-claims/utils/validation/validation.utils.v2";
-import DynamicFieldVer2 from "../../../features/detail-claims/components/DynamicFieldV2/DynamicFieldV2";
-import { mapToDynamicFieldV2 } from "../../../features/detail-claims/utils/mapper";
+import { useClaimData, useClaimForm, useSaveClaimStage } from "../../../features/detail-claims/hooks/useClaims.hooks";
+import ClaimStageForm from "../../../features/detail-claims/components/ClaimStageForm";
 
 const DetailClaimsPage = () => {
     const { id = "" } = useParams<{ id: string }>();
 
     const [currentStageIndex, setCurrentStageIndex] = useState(0);
+
     const [completedStages, setCompletedStages] = useState<Set<number>>(new Set());
 
-    const [allStagesData, setAllStagesData] = useState<Record<string, Record<string, any>>>({});
+    const [allStagesData, setAllStagesData] = useState<Record<string, any>>({});
 
-    const {
-        data: formConfig,
-        isLoading,
-        error: configError
-    } = useClaimForm(id);
+    const { data: formConfig, isLoading, error: configError } = useClaimForm(id);
 
     const { data: claimData } = useClaimData(id);
+
     const actionSaveStageMutation = useSaveClaimStage();
 
-    const currentStage = formConfig?.stages?.[currentStageIndex];
-
-    const validationSchema = useMemo(
-        () => currentStage ? buildValidationSchemaVer2(currentStage.fields) : undefined,
-        [currentStage]
-    );
-
-    const {
-        control,
-        handleSubmit,
-        formState: { errors, isValid },
-        reset,
-        trigger
-    } = useForm({
-        resolver: validationSchema ? yupResolver(validationSchema) : undefined,
-        mode: 'onChange',
-        defaultValues: claimData?.[currentStage?.id || ''] || {}
-    });
-
+    //only one useffect for get all data 
     useEffect(() => {
-        if (currentStage && claimData?.[currentStage.id]) {
-            reset(claimData[currentStage.id]);
-            trigger();
-        }
-    }, [currentStage, claimData, reset, trigger]);
-
-    useEffect(() => {
-        if (claimData) {
-            setAllStagesData(claimData);
-        }
+        if (claimData) setAllStagesData(claimData);
     }, [claimData]);
 
-    if (isLoading) {
-        return <Loading />;
-    }
+    if (isLoading) return <Loading />;
+    if (configError || !formConfig?.stages) return <ErrorClaimsComp />;
 
-    if (configError || !formConfig || !formConfig.stages || !currentStage) {
-        return <ErrorClaimsComp />;
-    }
+    const currentStage = formConfig.stages[currentStageIndex];
+    const isLastStage = currentStageIndex === formConfig.stages.length - 1;
 
-    const onSubmit = async (data: Record<string, any>) => {
-        console.log('Current stage data:', data);
+    const handleStageSubmit = async (data: Record<string, any>) => {
 
-        if (!currentStage) return;
-
-        const updatedAllData = {
-            ...allStagesData,
-            [currentStage.id]: data
-        };
+        const updatedAllData = { ...allStagesData, [currentStage.id]: data };
+        
         setAllStagesData(updatedAllData);
+        
+        setCompletedStages(prev => new Set(prev).add(currentStageIndex));
 
         try {
-
-            setCompletedStages(prev => new Set(prev).add(currentStageIndex));
-
-            const isLastStage = currentStageIndex === formConfig.stages.length - 1;
-
             if (isLastStage) {
-                console.log('=== FINAL SUBMISSION ===');
-                console.log('All stages data:', updatedAllData);
-
-                const flattenedData = Object.values(updatedAllData).reduce((acc, stageData) => {
-                    return { ...acc, ...stageData };
-                }, {});
-
-                console.log('Flattened data:', flattenedData);
+                const flattenedData = Object.values(updatedAllData).reduce((acc, stageData) => ({ ...acc, ...stageData }), {});
 
                 await actionSaveStageMutation.mutateAsync({
                     claimId: id,
                     stageId: currentStage.id,
                     data: flattenedData
-                })
+                });
             } else {
                 setCurrentStageIndex(prev => prev + 1);
             }
         } catch (error) {
-            console.error("Error saving stage data:", error);
+            console.error("Error saving stage:", error);
         }
     };
 
-    const handlePrevious = () => {
-        setCurrentStageIndex(Math.max(0, currentStageIndex - 1));
-    };
+    const handlePrevious = () => setCurrentStageIndex(prev => Math.max(0, prev - 1));
 
-    const isLastStage = formConfig.stages.length - 1 === currentStageIndex;
     return (
         <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
             <Typography variant='h3' component="h1" fontWeight="bold" gutterBottom>
@@ -135,74 +77,22 @@ const DetailClaimsPage = () => {
             />
 
             <Paper elevation={3} sx={{ p: 4 }}>
-                <Typography variant='h4' component="h2" gutterBottom>
-                    {currentStage.title}
-                </Typography>
-                {currentStage.description && (
-                    <Typography variant='body1' color='text.secondary' paragraph>
-                        {currentStage.description}
-                    </Typography>
-                )}
 
-                <Divider sx={{ my: 3 }} />
-
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Box sx={{ mb: 3 }}>
-                        {/* {currentStage.fields.map(field => (
-                            <DynamicField
-                                key={field.id}
-                                field={field}
-                                control={control}
-                                error={errors[field.id]}
-                            />
-                        ))} */}
-
-                        {currentStage.fields.map((oldField) => {
-                            const newFieldData = mapToDynamicFieldV2(oldField);
-
-                            return (
-                                <DynamicFieldVer2
-                                    key={newFieldData.id}
-                                    field={newFieldData} // Bây giờ props này đã chuẩn DynamicFieldTypeV2
-                                    control={control}
-                                    error={errors[newFieldData.id]}
-                                />
-                            );
-                        })}
-                    </Box>
-
-                    <Divider sx={{ my: 3 }} />
-
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Button
-                            variant='outlined'
-                            startIcon={<ArrowBackIcon />}
-                            onClick={handlePrevious}
-                            disabled={currentStageIndex === 0}
-                            size='large'
-                        >
-                            Previous
-                        </Button>
-                        <Button
-                            type="submit"
-                            variant='contained'
-                            endIcon={isLastStage ? <CheckIcon /> : <ArrowForwardIcon />}
-                            disabled={!isValid || actionSaveStageMutation.isPending}
-                            size='large'
-                        >
-                            {actionSaveStageMutation.isPending
-                                ? 'Saving...'
-                                : isLastStage
-                                    ? 'Submit claim'
-                                    : 'Save and continue'
-                            }
-                        </Button>
-                    </Box>
-                </form>
+                {/* use key for useForm(rhf) to have ability auto reset and sync with default values */}
+                <ClaimStageForm
+                    key={currentStage.id}
+                    stageConfig={currentStage}
+                    defaultValues={allStagesData[currentStage.id] || {}}
+                    onSubmit={handleStageSubmit}
+                    onPrevious={handlePrevious}
+                    isFirstStage={currentStageIndex === 0}
+                    isLastStage={isLastStage}
+                    isSaving={actionSaveStageMutation.isPending}
+                />
 
                 {actionSaveStageMutation.isError && (
                     <Alert severity='error' sx={{ mt: 2 }}>
-                        Failed to save data for this stage. Please try again.
+                        Failed to save data. Please try again.
                     </Alert>
                 )}
             </Paper>
