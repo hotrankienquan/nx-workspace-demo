@@ -22,5 +22,8 @@ export default {
   coverageDirectory: 'test-output/jest/coverage',
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
+    "!src/app/*.{js,ts,jsx,tsx}",
+    "!src/app/app/*.{js,ts,jsx,tsx}",
+    "!src/*.{ts,tsx}"
   ]
 } satisfies Config;

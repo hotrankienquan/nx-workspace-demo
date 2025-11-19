@@ -8,7 +8,7 @@ const ListClaimsPage = () => {
     const { claims, loading, error, activeCategory, setActiveCategory } = useClaimsStore("Motor");
   
     return (
-        <Box sx={{ display: 'flex', height: '100%' }}>
+        <Box data-testid="wrapper-page-list-claims" sx={{ display: 'flex', height: '100%' }}>
             <SidebarInstruct setActiveCategory={setActiveCategory!!} />
             <ContentClaims 
                 claims={claims} 
