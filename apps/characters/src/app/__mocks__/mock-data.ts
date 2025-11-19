@@ -89,7 +89,7 @@ export const CLAIM_FORM_CONFIG_DATA_MOCK: ClaimFormConfig = {
             description: 'Provide your personal details',
             fields: [
                 {
-                    id: 'fullName2',
+                    id: 'dropdown2',
                     label: 'Country',
                     type: 'dropdown',
                     validation: { required: true },
@@ -108,7 +108,7 @@ export const CLAIM_FORM_CONFIG_DATA_MOCK: ClaimFormConfig = {
                     ],
                 },
                 {
-                    id: 'email2',
+                    id: 'radio2',
                     label: 'Gender',
                     type: 'radio',
                     validation: { required: true },
@@ -122,7 +122,7 @@ export const CLAIM_FORM_CONFIG_DATA_MOCK: ClaimFormConfig = {
                 },
                 {
                     id: 'phone2',
-                    label: 'Phone Number',
+                    label: 'Phone Number 2',
                     type: 'text',
                     placeholder: 'Enter your phone number',
                     validation: { required: true, pattern: 'phone' },

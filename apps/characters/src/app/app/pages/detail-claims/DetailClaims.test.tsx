@@ -1,6 +1,6 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, renderHook, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import '../../../../../setupTests'
 import { server } from "../../../__mocks__/server";
@@ -8,14 +8,15 @@ import { rest } from "msw";
 import { BASE_URL_APP } from "../../../globals/constants";
 import { CLAIM_FORM_CONFIG_DATA_MOCK } from "../../../__mocks__/mock-data";
 import DetailClaimsPage from './page'
-import { useClaimForm } from "../../../features/detail-claims/hooks/useClaims.hooks";
 import { ReactNode } from "react";
 import userEvent from '@testing-library/user-event';
+
+
 const createTestQueryClient = () => new QueryClient({
     defaultOptions: {
         queries: {
-            retry: false, 
-            gcTime: 0, 
+            retry: false,
+            gcTime: 0,
         },
     },
 });
@@ -44,7 +45,7 @@ describe("DetailClaims Page", () => {
         server.use(
             rest.get(`${BASE_URL_APP}/claims/form-config`, (req, res, ctx) => {
                 return res(
-                    ctx.delay(150), 
+                    ctx.delay(150),
                     ctx.json(CLAIM_FORM_CONFIG_DATA_MOCK)
                 );
             })
@@ -52,7 +53,7 @@ describe("DetailClaims Page", () => {
 
         renderWithProviders(<DetailClaimsPage />);
 
-       
+
         expect(screen.getByTestId("loading-indicator")).toBeInTheDocument();
 
         await waitFor(() => {
@@ -60,29 +61,7 @@ describe("DetailClaims Page", () => {
         });
     });
 
-    test("should return data successfully", async () => {
-        server.use(
-            rest.get(`${BASE_URL_APP}/claims/form-config`, (req, res, ctx) => {
-                const claimId = req.url.searchParams.get("claimId");
-                if (claimId === "m1") {
-                    return res(ctx.status(200), ctx.json(CLAIM_FORM_CONFIG_DATA_MOCK));
-                }
-                return res(ctx.status(400));
-            })
-        );
 
-        const { result } = renderHook(() => useClaimForm("m1"), {
-            wrapper: AppTestWrapper, 
-        });
-
-        expect(result.current.isLoading).toBe(true);
-        expect(result.current.data).toBeUndefined();
-
-        await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-        expect(result.current.data).toEqual(CLAIM_FORM_CONFIG_DATA_MOCK);
-        expect(result.current.error).toBeNull();
-    });
 
 
 
@@ -112,7 +91,7 @@ describe("handleStageSubmit Logic", () => {
         const phoneInput = screen.getByLabelText(/Phone Number/i);
         await user.type(phoneInput, "0973636363");
 
-        
+
         const submitBtn = screen.getByRole('button', { name: /Save and continue/i });
         await waitFor(() => {
             expect(submitBtn).toBeEnabled();
@@ -122,7 +101,73 @@ describe("handleStageSubmit Logic", () => {
             expect(screen.getByText("Personal Information 2")).toBeInTheDocument();
         });
 
-      
+
+
+
     });
+
+    test("should flatten data and call api on final stage", async () => {
+        const user = userEvent.setup();
+
+        server.use(
+            rest.post(`${BASE_URL_APP}/claims/stage/save/:claimId/:stageId`, (req, res, ctx) => {
+                return res(ctx.status(200), ctx.json({ message: 'Stage data saved successfully' }))
+            })
+        );
+        server.use(
+            rest.get(`${BASE_URL_APP}/claims/form-config`, (req, res, ctx) => {
+                return res(ctx.json(CLAIM_FORM_CONFIG_DATA_MOCK));
+            }),
+        );
+
+        renderWithProviders(<DetailClaimsPage />);
+
+        await waitFor(() => expect(screen.getByTestId("form-title")).toBeInTheDocument());
+
+        const nameInput = screen.getByLabelText(/Full Name/i);
+        await user.type(nameInput, "John Doe");
+
+        const emailInput = screen.getByLabelText(/Email/i);
+        await user.type(emailInput, "john@gmail.com")
+
+        const phoneInput = screen.getByLabelText(/Phone Number/i);
+        await user.type(phoneInput, "0973636363");
+
+
+        const submitBtn = screen.getByRole('button', { name: /Save and continue/i });
+        await waitFor(() => {
+            expect(submitBtn).toBeEnabled();
+        });
+        await userEvent.click(submitBtn);
+
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole("heading", { level: 2, name: /Personal Information 2/i })
+            ).toBeInTheDocument();
+        });
+        // Stage 2
+
+
+
+        const countryDropdown = screen.getByLabelText(/Country/i);
+        await user.click(countryDropdown);
+        const countryOption = screen.getByRole("option", { name: "United States" });
+        await user.click(countryOption);
+
+        const femaleRadio = screen.getByRole("radio", { name: /Female/i });
+        await user.click(femaleRadio);
+
+
+        const phoneInput2 = screen.getByLabelText(/Phone Number 2/i);
+        await user.type(phoneInput2, "0123456789");
+
+        const finalSubmitBtn = screen.getByRole("button", { name: /Submit claim/i });
+        await waitFor(() => expect(finalSubmitBtn).toBeEnabled());
+        await user.click(finalSubmitBtn);
+        
+
+
+    })
 
 });

@@ -51,6 +51,7 @@ const ClaimStageForm: React.FC<ClaimStageFormProps> = ({
             <Divider sx={{ my: 3 }} />
 
             <ClaimFieldList 
+                data-testid="claim-field-list-testid"
                 fields={stageConfig.fields} 
                 control={control} 
                 errors={errors} 

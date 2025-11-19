@@ -4,7 +4,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router-dom';
 import ListClaimsPage from './page';
 
-// CHỈ MOCK DATA LAYER (API/Hook)
 jest.mock('../../../features/list-claims/hooks/useClaimsStore');
 
 import { useClaimsStore } from '../../../features/list-claims/hooks/useClaimsStore';
@@ -12,7 +11,6 @@ import { ClaimsStore, IListClaims } from '../../../features/list-claims/types/in
 
 const mockUseClaimsStore = useClaimsStore as jest.MockedFunction<typeof useClaimsStore>;
 
-// Wrapper để cung cấp Theme và Router cho component
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
     const theme = createTheme();
     return (
@@ -65,10 +63,8 @@ describe('ListClaimsPage - Integration Test', () => {
         it('should load and display Motor category claims by default', () => {
             renderWithProviders(<ListClaimsPage />);
 
-            // Verify hook was called with Motor category
             expect(mockUseClaimsStore).toHaveBeenCalledWith('Motor');
 
-            // Verify claims are displayed
             expect(screen.getByText('Car Accident Claim')).toBeInTheDocument();
             expect(screen.getByText('Motorcycle Theft')).toBeInTheDocument();
         });
@@ -76,11 +72,9 @@ describe('ListClaimsPage - Integration Test', () => {
         it('should display correct number of claims', () => {
             renderWithProviders(<ListClaimsPage />);
 
-            // Verify both claims are rendered
             expect(screen.getByText('Car Accident Claim')).toBeInTheDocument();
             expect(screen.getByText('Motorcycle Theft')).toBeInTheDocument();
             
-            // Verify descriptions are also rendered
             expect(screen.getByText('Accident on Highway 1')).toBeInTheDocument();
             expect(screen.getByText('Stolen from parking lot')).toBeInTheDocument();
         });
@@ -96,13 +90,10 @@ describe('ListClaimsPage - Integration Test', () => {
 
             renderWithProviders(<ListClaimsPage />);
 
-            // Check for loading indicator (adjust based on your actual implementation)
-            // Option 1: Check for progressbar role
             const progressBar = screen.queryByRole('progressbar');
             if (progressBar) {
                 expect(progressBar).toBeInTheDocument();
             } else {
-                // Option 2: Check for loading text
                 expect(screen.getByText(/loading/i)).toBeInTheDocument();
             }
         });
@@ -131,7 +122,6 @@ describe('ListClaimsPage - Integration Test', () => {
 
             renderWithProviders(<ListClaimsPage />);
 
-            // Check for error message (adjust based on your actual implementation)
             const errorText = screen.queryByText(/failed to fetch claims/i) || 
                              screen.queryByText(/error/i) ||
                              screen.queryByText(/something went wrong/i);
@@ -161,7 +151,6 @@ describe('ListClaimsPage - Integration Test', () => {
 
             renderWithProviders(<ListClaimsPage />);
 
-            // Check for empty state message (adjust based on your actual implementation)
             const emptyText = screen.queryByText(/no claims/i) || 
                              screen.queryByText(/no data/i) ||
                              screen.queryByText(/empty/i);
@@ -169,7 +158,6 @@ describe('ListClaimsPage - Integration Test', () => {
             if (emptyText) {
                 expect(emptyText).toBeInTheDocument();
             } else {
-                // If no explicit empty message, verify claims are not shown
                 expect(screen.queryByText('Car Accident Claim')).not.toBeInTheDocument();
             }
         });
@@ -182,25 +170,19 @@ describe('ListClaimsPage - Integration Test', () => {
             const firstClaim = mockClaims[0];
             const secondClaim = mockClaims[1];
             
-            // Verify all fields of first claim are rendered
             expect(screen.getByText(firstClaim.title)).toBeInTheDocument();
             expect(screen.getByText(firstClaim.description)).toBeInTheDocument();
             
-            // Verify all fields of second claim are rendered
             expect(screen.getByText(secondClaim.title)).toBeInTheDocument();
             expect(screen.getByText(secondClaim.description)).toBeInTheDocument();
         });
 
         it('should maintain data integrity across re-renders', () => {
             const { rerender } = renderWithProviders(<ListClaimsPage />);
-
-            // Verify initial render
             expect(screen.getByText('Car Accident Claim')).toBeInTheDocument();
 
-            // Force re-render (KHÔNG wrap lại với Router/Theme vì đã có wrapper)
             rerender(<ListClaimsPage />);
 
-            // Data should remain consistent
             expect(screen.getByText('Car Accident Claim')).toBeInTheDocument();
             expect(screen.getByText('Motorcycle Theft')).toBeInTheDocument();
         });
@@ -241,11 +223,8 @@ describe('ListClaimsPage - Integration Test', () => {
 
             renderWithProviders(<ListClaimsPage />);
 
-            // Verify first and last claims are rendered (or at least some claims)
             expect(screen.getByText('Claim 1')).toBeInTheDocument();
             
-            // Note: Depending on virtualization, not all claims may be in DOM
-            // Adjust this test based on your implementation
         });
     });
 
@@ -265,7 +244,6 @@ describe('ListClaimsPage - Integration Test', () => {
         it('should receive all expected properties from useClaimsStore', () => {
             renderWithProviders(<ListClaimsPage />);
 
-            // Verify the hook returns all expected properties
             const returnedState = mockUseClaimsStore.mock.results[0].value;
             
             expect(returnedState).toHaveProperty('claims');

@@ -12,9 +12,6 @@ export function useClaimsStore(category: CategoryType): Partial<ClaimsStore> {
         staleTime: 1000 * 60 * 5,
     });
 
-    console.log({data, error, isLoading});
-    
-
     const [activeCategory, setActiveCategory] = useState<CategoryType>(category);
 
     return {
