@@ -108,7 +108,7 @@ export const CLAIM_FORM_CONFIG_DATA_MOCK: ClaimFormConfig = {
                     ],
                 },
                 {
-                    id: 'email',
+                    id: 'email2',
                     label: 'Gender',
                     type: 'radio',
                     validation: { required: true },
@@ -121,7 +121,7 @@ export const CLAIM_FORM_CONFIG_DATA_MOCK: ClaimFormConfig = {
                     placeholder: 'Select your gender',
                 },
                 {
-                    id: 'phone',
+                    id: 'phone2',
                     label: 'Phone Number',
                     type: 'text',
                     placeholder: 'Enter your phone number',

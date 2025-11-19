@@ -22,4 +22,4 @@ const ClaimFieldList: React.FC<ClaimFieldListProps> = ({ fields, control, errors
     );
 };
 
-export default React.memo(ClaimFieldList);
+export default (ClaimFieldList);

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Divider, Typography } from "@mui/material";
@@ -20,16 +20,22 @@ const ClaimStageForm: React.FC<ClaimStageFormProps> = ({
         () => buildValidationSchemaVer2(stageConfig.fields),
         [stageConfig.fields]
     );
+    console.log({validationSchema});
+    
 
     const {
         control,
         handleSubmit,
         formState: { errors, isValid },
+        reset
     } = useForm({
         resolver: yupResolver(validationSchema),
         mode: 'onChange',
         defaultValues: defaultValues
     });
+    useEffect(() => {
+        reset(defaultValues);
+    }, [defaultValues, reset]);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
