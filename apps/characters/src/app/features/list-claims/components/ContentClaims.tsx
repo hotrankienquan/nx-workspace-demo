@@ -8,7 +8,7 @@ const ContentClaims = ({ loading, activeCategory, claims, error }: ContentClaims
     const theme = useTheme();
     if (loading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+            <Box data-testid="loading-indicator-content-claims" sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
                 <CircularProgress />
                 <Typography sx={{ ml: 2 }}>Loading claims for {activeCategory}...</Typography>
             </Box>
@@ -17,7 +17,7 @@ const ContentClaims = ({ loading, activeCategory, claims, error }: ContentClaims
 
     if (error) {
         return (
-            <Alert severity="error" sx={{ mt: 2 }}>
+            <Alert data-testid="error-alert-cc" severity="error" sx={{ mt: 2 }}>
                 {error.message}
             </Alert>
         );
