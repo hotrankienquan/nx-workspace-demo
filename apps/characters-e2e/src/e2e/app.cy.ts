@@ -6,17 +6,17 @@ describe('claims-e2e', () => {
     // === ĐÃ SỬA LỖI: BỎ CHẶN CY.WAIT GÂY TIMEOUT ===
     // Lỗi CypressError: cy.wait() timed out do không tìm thấy request.
     // Chúng ta loại bỏ cy.intercept và cy.wait không cần thiết này.
-    
+
     // cy.intercept('GET', '**/detail-claims/m1/data').as('loadClaimData'); 
     cy.visit('http://localhost:4200/remote1/detail-claims/m1');
-    
+
     // cy.wait('@loadClaimData', extendedTimeout); // Bị loại bỏ
 
     // Chờ các phần tử tiêu đề trang tải xong
     // Lệnh này trở thành điểm neo (anchor) chính để Cypress biết trang đã tải.
     cy.contains('Claims Detail', extendedTimeout).should('be.visible');
     cy.contains('Claim ID: m1', extendedTimeout).should('be.visible');
-    
+
     // Đảm bảo loading spinner (nếu có) đã biến mất trước khi bắt đầu test
     // cy.get('.loading-indicator').should('not.exist'); 
   });
@@ -24,7 +24,7 @@ describe('claims-e2e', () => {
   it('should complete the entire claims form flow', () => {
     // ===== STAGE 1: Personal Information (Fixed Timeout for Phone Number) =====
     cy.contains('Personal Information').should('be.visible');
-    
+
     // Fill out Full Name
     cy.get('input[placeholder*="Enter your full name"]')
       .should('be.visible')
@@ -50,25 +50,25 @@ describe('claims-e2e', () => {
     // ===== STAGE 2: Personal Information 2 =====
     // Chờ rõ ràng cho tiêu đề Stage 2 xuất hiện
     cy.contains('Personal Information 2', extendedTimeout).should('be.visible');
-    
-    // Fill out Country dropdown
-    cy.get('select[placeholder*="Country"], select[name="country"]')
-      .should('be.visible')
-      .select('Vietnam'); 
 
-    // Select Gender - Male
-    cy.contains('label', 'Male').parent().find('input[type="radio"]')
-      .should('be.visible')
-      .check();
+    cy.get('#dropdown2').click();// 1. Click vào trường nhập (nhãn "Country") để mở menu
+    cy.contains('li', 'Vietnam', extendedTimeout).click(); // 2. 
 
+    cy.get('input[name="radio2"][value="male"]')
+  .should('exist') // Nên tồn tại
+  .check({ force: true }) // Chọn nó, bất kể nó bị ẩn hay không
+  .should('be.checked'); // Xác nhận đã được chọn
     // Fill out Phone Number 2
-    cy.get('input[placeholder*="Phone Number 2"], input[name="phoneNumber2"]')
+    cy.get('input[placeholder*="Enter your phone number"], input[name="phone2"]')
       .should('be.visible')
-      .type('0907654321');
+      .type('0907654321')
+      .should('have.value', '0907654321');
 
-    // Click "SUBMIT CLAIM" button
-    cy.contains('button', 'SUBMIT CLAIM').should('be.visible').click();
+    // Kiểm tra và Click "SUBMIT CLAIM" button
+    cy.contains('button', 'Submit claim')
+      .should('be.visible') // Kiểm tra nút đã hiện
+      .click();
   });
 
- 
+
 })
