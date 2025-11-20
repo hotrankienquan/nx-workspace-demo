@@ -1,7 +1,7 @@
 import { Outlet, Route, Routes } from "react-router-dom"
 import { DETAIL_CLAIMS_PATH_ROUTE, LIST_CLAIMS_PATH_ROUTE } from "../../globals/paths/claims";
 import ListClaimsPage from "../pages/list-claims/page";
-import DetailClaimsPage from "../pages/detail-claims/page";
+import DetailClaimPageV2 from "../pages/detail-claims/DetailClaimsV2";
 
 const RootRoute = () => {
     return (
@@ -13,7 +13,7 @@ const RootRoute = () => {
                 />
                 <Route
                     path={DETAIL_CLAIMS_PATH_ROUTE}
-                    element={<DetailClaimsPage />}
+                    element={<DetailClaimPageV2 />}
                 />
             </Route>
         </Routes>

@@ -1,4 +1,4 @@
-import { render, renderHook, screen, waitFor } from '@testing-library/react';
+import { renderHook, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ListClaimsPage from './page';
 
@@ -8,8 +8,6 @@ import { rest } from 'msw';
 import { BASE_URL_APP } from '../../../globals/constants';
 import { CLAIMS_DATA_MOCK } from '../../../__mocks__/mock-data';
 import { AppTestWrapper, renderWithProviders } from '../detail-claims/DetailClaims.test';
-import ContentClaims from '../../../features/list-claims/components/ContentClaims';
-import { IListClaims } from '../../../features/list-claims/types/interface/list-claims';
 import { useClaimsStore } from '../../../features/list-claims/hooks/useClaimsStore';
 import { CategoryType } from '../../../features/list-claims/types/types';
 

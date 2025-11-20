@@ -24,6 +24,7 @@ export default {
     'src/**/*.{ts,tsx}',
     "!src/app/*.{js,ts,jsx,tsx}",
     "!src/app/app/*.{js,ts,jsx,tsx}",
-    "!src/*.{ts,tsx}"
+    "!src/*.{ts,tsx}",
+    "!src/app/features/detail-claims/utils/**.{ts}",
   ]
 } satisfies Config;

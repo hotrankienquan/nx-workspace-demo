@@ -68,6 +68,7 @@ describe('buildValidationSchema (Integrated Test)', () => {
         expect(stringSchema.isValidSync('ABC')).toBe(true);
     });
 
+
     it('should correctly apply ALL constraints (required, min, max) to the Number field', () => {
         const schema = buildValidationSchemaVer2(fields);
         const numberSchema = (schema.fields as any).age as yup.NumberSchema;

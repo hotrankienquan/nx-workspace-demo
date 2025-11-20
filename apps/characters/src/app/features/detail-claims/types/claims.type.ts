@@ -1,3 +1,4 @@
+import { useSaveClaimStage } from "../hooks/useClaims.hooks";
 
 
 export type FieldType = 'text' | 'number' | 'dropdown' | 'radio' | 'textarea';
@@ -51,3 +52,18 @@ export interface ClaimFormField {
 export interface ClaimFormConfigResponse {
     fields: ClaimFormField[];
 }
+
+
+export type Stage = any;
+export type AnyRecord = Record<string, any>;
+
+export type ContextShape = {
+    id: string;
+    formConfig?: { stages: Stage[] };
+    currentStageIndex: number;
+    setCurrentStageIndex: React.Dispatch<React.SetStateAction<number>>;
+    completedStages: Set<number>;
+    allStagesData: AnyRecord;
+    setAllStagesData: React.Dispatch<React.SetStateAction<AnyRecord>>;
+    actionSaveStageMutation: ReturnType<typeof useSaveClaimStage>;
+};
