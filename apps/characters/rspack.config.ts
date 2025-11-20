@@ -1,9 +1,9 @@
-import { NxAppRspackPlugin } from '@nx/rspack/app-plugin.js';
-import { NxReactRspackPlugin } from '@nx/rspack/react-plugin.js';
+import { NxAppRspackPlugin } from '@nx/rspack/app-plugin';
+import { NxReactRspackPlugin } from '@nx/rspack/react-plugin';
 import {
   NxModuleFederationPlugin,
   NxModuleFederationDevServerPlugin,
-} from '@nx/module-federation/rspack.js';
+} from '@nx/module-federation/rspack';
 import { join } from 'path';
 
 import config from './module-federation.config';

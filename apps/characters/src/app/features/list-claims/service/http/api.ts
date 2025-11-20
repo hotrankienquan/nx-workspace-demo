@@ -1,4 +1,4 @@
-import apiClient from "apps/characters/src/app/globals/service/http/apiClient";
+import apiClient from "../../../../globals/service/http/apiClient";
 import { IListClaims } from "../../types/interface/list-claims";
 import { CategoryType } from "../../types/types";
 
