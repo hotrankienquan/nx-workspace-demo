@@ -18,7 +18,6 @@ const StageNavigation: React.FC<StateNavigationProps> = ({ completedStages, curr
         return false;
     };
 
-
     return (
         <Box sx={{
             width: '100%',
@@ -32,7 +31,8 @@ const StageNavigation: React.FC<StateNavigationProps> = ({ completedStages, curr
 
                     const isCompleted = completedStages.has(index);
                     const isLocked = !canNavigate(index);
-
+                    console.log({isLocked})
+                    
                     return (<Step
                         key={stage.id}
                         completed={isCompleted}

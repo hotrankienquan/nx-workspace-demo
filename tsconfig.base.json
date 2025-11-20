@@ -16,7 +16,7 @@
     "skipLibCheck": true,
     "strict": false,
     "target": "es2022",
-    "customConditions": ["@kiqi-monorepo/source"],
+    // "customConditions": ["@kiqi-monorepo/source"],
     "baseUrl": "."
   }
 }

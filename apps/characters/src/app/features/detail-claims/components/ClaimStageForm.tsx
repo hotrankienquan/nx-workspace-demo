@@ -20,7 +20,6 @@ const ClaimStageForm: React.FC<ClaimStageFormProps> = ({
         () => buildValidationSchemaVer2(stageConfig.fields),
         [stageConfig.fields]
     );
-    console.log({validationSchema});
     
 
     const {
