@@ -19,13 +19,16 @@ describe('claims-e2e', () => {
     cy.get('input[placeholder*="Enter your full name"]')
       .should('be.visible')
       .type('Nguyen Van A');
+
     cy.get('input[placeholder*="Email"], input[name="email"]')
       .should('be.visible')
       .type('nguyenvana@example.com');
+
     cy.get('input[placeholder*="Enter your phone number"]', extendedTimeout)
       .should('be.visible')
       .type('0901234567')
       .should('have.value', '0901234567');
+      
     cy.contains('button', 'Save and continue', extendedTimeout)
       .should('be.visible')
       .click();
