@@ -1,8 +1,9 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { createTheme, ThemeProvider } from '@mui/material';
+
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import RootEntryPoint from './app/app/app';
+import { ThemeProvider } from './app/theme';
 
 
 async function enableMocking() {
@@ -20,18 +21,14 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const theme = createTheme();
-
-
 
 enableMocking().then(() => {
-  console.log('Mocking enabled');
   root.render(
     <StrictMode>
-        <ThemeProvider theme={theme}>
-          <RootEntryPoint />
-        </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={true} />
+      <ThemeProvider>
+        <RootEntryPoint />
+      </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={true} />
     </StrictMode>
   );
 });
